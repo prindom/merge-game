@@ -1,0 +1,21 @@
+.one-game-field > span {
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  background-color: rgba(0, 140, 255, 1);
+
+}
+.one-game-field {
+  background-color: rgba(0, 140, 255, 0.73);
+  border: 2px solid white;
+  border-radius: 10px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.one-game-row {
+
+}
