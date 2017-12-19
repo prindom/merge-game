@@ -1,58 +1,63 @@
 let $game = $("#game");
 let coins = 0;
-let fieldCount = 3;
+let fieldCount = 9;
 let maxCoins = Math.pow(2, fieldCount) - 1;
 let progress = 0;
-let gameInterval = setInterval(addOneToken, 1000);
+let gameInterval = setInterval(addOneToken, 3000);
 
 $(document).ready(function() {
   addFields(fieldCount);
+  addOneToken();
 
   $(".makeDraggable").draggable({
-    revert: function(event, ui) {
-      // on older version of jQuery use "draggable"
-      // $(this).data("draggable")
-      // on 2.x versions of jQuery use "ui-draggable"
-      // $(this).data("ui-draggable")
-      $(this).data("uiDraggable").originalPosition = {
-        top: 0,
-        left: 0
-      };
-      // return boolean
-      return !event;
-      // that evaluate like this:
-      // return event !== false ? false : true;
-    },
-    start: function(event, ui) {
-      // console.log(event);
-      // console.log(ui);
-    }
+    revert: "invalid",
+    snapTolerance: 1,
+    cursor: "pointer"
   });
 
   $(".makeDroppable").droppable({
     accept: function(thing) {
       if (this.childElementCount == 0) {
+        console.log("accepted");
         return true;
       } else if(this.childElementCount == 1 && getLevel(thing) == getLevel($(this).children()[0])) {
+        console.log("accepted, same level");
+        console.log(getLevel(thing));
+        console.log(getLevel($(this).children()[0]));
         return true;
       } else {
+        console.log("rejected");
         return false;
       }
 
     },
     drop: function(ev, ui) {
-      // console.log("source: " , $(ui.draggable).data().source);
-      // console.log("this: ", $(this)[0].id);
-      if ($(this)[0].childElementCount > 0 && $($(this).children()[0]).data().id == $(ui.draggable).data().id && $(ui.draggable).data().source != $(this)[0].id) {
+      console.log("source: " , $(ui.draggable).data().source);
+      console.log("this: ", $(this)[0].id);
+      console.log(ev);
+      if($(this)[0].childElementCount > 0 && $(ui.draggable).data().source != $(this)[0].id) {
+        // merge 2
         let val = $(ui.draggable).data().id * 2;
         $(ui.draggable).detach().remove();
         $(this).html("");
         $(this).append($("<span class='makeDraggable level-" + val + "' data-level='"+val+"' data-source='"+$(this)[0].id+"' data-id='" + val + "'>" + val + "</span>").draggable());
-      } else if($(this)[0].childElementCount  == 0){
+      } else if( $(ui.draggable).data().source == $(this)[0].id) {
+        // append simple
         $(ui.draggable).detach().css({top: 0, left: 0}).appendTo(this);
       } else {
-        // $(ui.draggable).revert();
+        $(ui.draggable).detach().css({top: 0, left: 0}).appendTo(this);
+
       }
+      // if ($(this)[0].childElementCount > 0 && $($(this).children()[0]).data().id == $(ui.draggable).data().id && $(ui.draggable).data().source != $(this)[0].id) {
+      //   let val = $(ui.draggable).data().id * 2;
+      //   $(ui.draggable).detach().remove();
+      //   $(this).html("");
+      //   $(this).append($("<span class='makeDraggable level-" + val + "' data-level='"+val+"' data-source='"+$(this)[0].id+"' data-id='" + val + "'>" + val + "</span>").draggable());
+      // } else if($(this)[0].childElementCount  == 0){
+      //   $(ui.draggable).detach().css({top: 0, left: 0}).appendTo(this);
+      // } else {
+      //   // $(ui.draggable).revert();
+      // }
       }
     });
   })
