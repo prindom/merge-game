@@ -97,7 +97,7 @@ function addCoins(number) {
   progress = (coins/maxCoins) * 100;
 
   $("#coinsDisplay > span").text(coins);
-  $("#progressDisplay > span").text(progress+"%");
+  $("#progressDisplay > span").text(Math.floor(progress)+"%");
 }
 
 function addOneToken() {
