@@ -1,6 +1,6 @@
 let $game = $("#game");
 let coins = 0;
-let fieldCount = 9;
+let fieldCount = 3;
 let maxCoins = Math.pow(2, fieldCount) - 1;
 let progress = 0;
 let gameInterval = setInterval(addOneToken, 1000);
