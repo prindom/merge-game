@@ -1,10 +1,12 @@
 let $game = $("#game");
 let coins = 0;
+let fieldCount = 4;
+let maxCoins = Math.pow(2, fieldCount) - 1;
+let progress = 0;
+let gameInterval = setInterval(addOneToken, 5000);
 
 $(document).ready(function() {
-  addFields(6);
-
-  addToken(2);
+  addFields(fieldCount);
 
   $(".makeDraggable").draggable();
 
@@ -13,7 +15,7 @@ $(document).ready(function() {
         if(this.childElementCount == 0) {
           return  true;
         } else {
-          console.log($($(this).children()[0]).data().id);
+          // console.log($($(this).children()[0]).data().id);
           return  true;
         }
 
@@ -35,7 +37,7 @@ $(document).ready(function() {
 
 function addFields(number) {
   if($(".one-game-field").length % 3 == 0) {
-    console.log($(".one-game-field").length % 3,true);
+    // console.log($(".one-game-field").length % 3,true);
     // make new row
     if(number % 3 == 0) {
       for(let i = 0; i < number / 3; i++) {
@@ -62,7 +64,7 @@ function addFields(number) {
       $game.append($row);
     }
   } else {
-    console.log($(".one-game-field").length % 3, false);
+    // console.log($(".one-game-field").length % 3, false);
     // add to last row
   }
 }
@@ -75,9 +77,15 @@ function addToken(number, value = 1) {
   for(let i = 0; i < number; i++) {
     let pos = getRandomInt(min, max);
     let $token = $(`<span class="makeDraggable level-1" data-id="${value}">${value}</span>`);
-    console.log($(".one-game-field")[pos]);
-    $($(".one-game-field")[pos]).append($token);
+    // console.log($(".one-game-field")[pos]);
+    // console.log($(".one-game-field")[pos].childElementCount);
+    if($(".one-game-field")[pos].childElementCount == 0) {
+      $($(".one-game-field")[pos]).append($token);
+    } else {
+      i--;
+    }
   }
+  $(".makeDraggable").draggable();
 }
 
 function getRandomInt(min, max) {
@@ -86,5 +94,20 @@ function getRandomInt(min, max) {
 
 function addCoins(number) {
   coins += number;
+  progress = (coins/maxCoins) * 100;
+
   $("#coinsDisplay > span").text(coins);
+  $("#progressDisplay > span").text(progress+"%");
+}
+
+function addOneToken() {
+  console.log("Gametick++, Progress" + progress);
+  if(progress == 100) {
+    clearInterval(gameInterval);
+    alert("Winner Winner Chicken Dinner");
+  }
+  // console.log($(".one-game-field > span").length);
+  if($(".one-game-field > span").length < fieldCount) {
+    addToken(1);
+  }
 }
