@@ -3,7 +3,7 @@ let coins = 0;
 let fieldCount = 9;
 let maxCoins = Math.pow(2, fieldCount) - 1;
 let progress = 0;
-let gameInterval = setInterval(addOneToken, 3000);
+let gameInterval = setInterval(addOneToken, 500);
 
 $(document).ready(function() {
   addFields(fieldCount);
